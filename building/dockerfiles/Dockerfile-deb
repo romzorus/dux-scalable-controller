@@ -1,0 +1,11 @@
+# docker pull romzorus/deb-rust-build:v1.0
+
+FROM debian:bookworm
+
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y build-essential pkg-config libssl-dev curl
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+CMD ["/bin/bash", "-l"]

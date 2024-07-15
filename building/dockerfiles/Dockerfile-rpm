@@ -1,0 +1,14 @@
+# docker pull romzorus/rpm-rust-build:v1.0
+
+FROM fedora:41
+
+RUN dnf update --refresh -y
+RUN dnf install -y rpmdevtools rpmlint kernel-devel
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+RUN rpmdev-setuptree
+RUN mkdir ~/rpmbuild/BUILDROOT
+
+CMD ["/bin/bash", "-l"]

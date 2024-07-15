@@ -1,0 +1,9 @@
+Package: dux-controller
+Version: PLACEHOLDER_FOR_VERSION
+Section: base
+Priority: optional
+Architecture: all
+Depends: openssh-client
+Maintainer: romzorus <romzorus591@gmail.com>
+Description: A scalable and cloud-friendly automation / orchestration tool (controller component) written in Rust.
+Homepage: https://gitlab.com/dux-tool/dux
