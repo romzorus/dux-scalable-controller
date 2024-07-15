@@ -41,3 +41,8 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+# Todo list
+- [ ] introduce end-to-end encryption [(Ockam ?)](https://github.com/build-trust/ockam)
+- [ ] add unit tests and integration tests
+- [ ] create Docker image to allow scaling it
