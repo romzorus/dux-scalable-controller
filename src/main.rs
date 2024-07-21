@@ -22,6 +22,8 @@ use amqprs::{
 use tokio::time::Duration;
 use tracing_subscriber::{fmt, prelude::*};
 use tracing_subscriber::filter::EnvFilter;
+use simple_crypt::encrypt;
+use simple_crypt::decrypt;
 
 use duxcore::prelude::*;
 
@@ -184,11 +186,14 @@ async fn main() {
 
         let content = serde_json::to_string(&assignment).unwrap().into_bytes();
 
+        // Encrypt data
+        let encrypted_content = encrypt(&content, b"dux").unwrap();
+
         // create arguments for basic_publish
         let args = BasicPublishArguments::new(exchange_name, routing_key);
 
         channel
-            .basic_publish(BasicProperties::default(), content, args)
+            .basic_publish(BasicProperties::default(), encrypted_content, args)
             .await
             .unwrap();
 
