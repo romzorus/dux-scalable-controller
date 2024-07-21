@@ -5,12 +5,14 @@ use serde::Deserialize;
 #[derive(Deserialize)]
 pub struct DuxConfigScalableController {
     pub rabbitmq: RabbitMqConfig,
+    pub encryption: EncryptionParameters
 }
 
 impl DuxConfigScalableController {
     pub fn default() -> DuxConfigScalableController {
         DuxConfigScalableController {
             rabbitmq: RabbitMqConfig::default(),
+            encryption: EncryptionParameters::default()
         }
     }
 
@@ -59,6 +61,19 @@ impl RabbitMqConfig {
             rmq_port: 5672,
             rmq_username: "guest".to_string(),
             rmq_password: "guest".to_string(),
+        }
+    }
+}
+
+#[derive(Deserialize, Clone)]
+pub struct EncryptionParameters {
+    pub password: String,
+}
+
+impl EncryptionParameters {
+    pub fn default() -> EncryptionParameters {
+        EncryptionParameters {
+            password: "dux".to_string(),
         }
     }
 }
