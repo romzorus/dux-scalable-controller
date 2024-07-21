@@ -17,4 +17,5 @@ log = "0.4.21"
 config = "0.14.0"
 clap = { version = "4.5.3", features = ["derive"] }
 simple_crypt = "0.2.3"
+pem = { version = "3.0.4", features = ["serde"] }
 
