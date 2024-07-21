@@ -212,7 +212,10 @@ async fn main() {
             Ok(content) => {
                 match content {
                     Some((_, _, raw_message)) => {
-                        let assignment_result: Assignment = serde_json::from_str(&String::from_utf8_lossy(&raw_message)).unwrap();
+                        // Decrypt data
+                        let decrypted_serialized_result = decrypt(&raw_message, b"dux").unwrap();
+
+                        let assignment_result: Assignment = serde_json::from_str(&String::from_utf8_lossy(&decrypted_serialized_result)).unwrap();
 
                         match correlationidlist.iter().position(|x| (*x).eq(&assignment_result.correlationid)) {
                             Some(index) => { correlationidlist.remove(index); }
