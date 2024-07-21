@@ -187,7 +187,7 @@ async fn main() {
         let content = serde_json::to_string(&assignment).unwrap().into_bytes();
 
         // Encrypt data
-        let encrypted_content = encrypt(&content, b"dux").unwrap();
+        let encrypted_content = encrypt(&content, conf.encryption.password.as_bytes()).unwrap();
 
         // create arguments for basic_publish
         let args = BasicPublishArguments::new(exchange_name, routing_key);
@@ -213,7 +213,7 @@ async fn main() {
                 match content {
                     Some((_, _, raw_message)) => {
                         // Decrypt data
-                        let decrypted_serialized_result = decrypt(&raw_message, b"dux").unwrap();
+                        let decrypted_serialized_result = decrypt(&raw_message, conf.encryption.password.as_bytes()).unwrap();
 
                         let assignment_result: Assignment = serde_json::from_str(&String::from_utf8_lossy(&decrypted_serialized_result)).unwrap();
 
