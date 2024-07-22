@@ -4,8 +4,11 @@
     // - HostList parsing
     // - Assignments production
     // - Results display
-use std::collections::HashMap;
+use std::{collections::HashMap, str::FromStr};
 use std::path::PathBuf;
+use std::fs::File;
+use std::io::Read;
+use std::error::Error;
 use std::process::exit;
 use log::{debug, error, log_enabled, info, Level, warn};
 use env_logger::Env;
@@ -19,6 +22,7 @@ use amqprs::{
     consumer::DefaultConsumer,
     BasicProperties,
 };
+use pem::Pem;
 use tokio::time::Duration;
 use tracing_subscriber::{fmt, prelude::*};
 use tracing_subscriber::filter::EnvFilter;
@@ -77,10 +81,35 @@ async fn main() {
 
         let authmode = match &cliargs.key {
             Some(privatekeypath) => {
-                Ssh2AuthMode::SshKeys((
-                    cliargs.user.clone().unwrap(),
-                    PathBuf::from(privatekeypath)
-                ))
+                let mut keyfile = match File::open(privatekeypath) {
+                    Ok(f) => { f }
+                    Err(e) => {
+                        error!("Unable to open SSH key file : {}", e);
+                        exit(1);
+                    }
+                };
+            
+                let mut buffer = String::new();
+            
+                match keyfile.read_to_string(&mut buffer) {
+                    Ok(bytes_number) => {
+                        if bytes_number == 0 {
+                            error!("No byte read from SSH key file. Is it really empty ?");
+                            exit(1);
+                        } else {
+                            let pem_encoded_key = Pem::from_str(buffer.as_str()).unwrap();
+
+                            Ssh2AuthMode::KeyMemory((
+                                cliargs.user.clone().unwrap(),
+                                pem_encoded_key
+                            ))
+                        }
+                    }
+                    Err(e) => {
+                        error!("Unable to read SSH key content : {}", e);
+                        exit(1);
+                    }
+                }
             }
             None => {
                 // No SSH key given as argument, trying with password if it is given

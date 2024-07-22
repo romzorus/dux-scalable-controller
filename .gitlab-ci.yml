@@ -3,7 +3,7 @@ workflow:
     - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "dev"
 
 variables:
-  DUX_VERSION: "0.1.0"
+  DUX_VERSION: "0.1.1"
 
 stages:
   - build
