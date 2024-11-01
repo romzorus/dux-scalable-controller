@@ -19,3 +19,5 @@ clap = { version = "4.5.16", features = ["derive"] }
 simple_crypt = "0.2.3"
 pem = { version = "3.0.4", features = ["serde"] }
 
+[profile.release]
+lto = true
